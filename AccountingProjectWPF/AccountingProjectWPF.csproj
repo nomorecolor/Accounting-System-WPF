@@ -62,9 +62,10 @@
     <Compile Include="DataAccess\DataAccess.cs" />
     <Compile Include="Model\CardDetails.cs" />
     <Compile Include="Model\CardModel.cs" />
-    <Compile Include="Model\CardModelQuery.cs" />
+    <Compile Include="Model\QueryModel.cs" />
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Model\DataModel.cs" />
+    <Compile Include="Model\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\CardViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ucCard.xaml.cs">

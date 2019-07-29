@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace AccountingProjectWPF.ViewModel
 {
-    public class CardViewModel
+    public class CardViewModel : NotifyPropertyChanged
     {
-        public Card Card { get; set; }
+        private Card _card;
+        public Card Card
+        {
+            get => _card;
+            set => SetProperty(ref _card, value);
+        }
 
         private DataAccess.DataAccess _dataAccess;
 
@@ -20,19 +25,14 @@ namespace AccountingProjectWPF.ViewModel
             _dataAccess = new DataAccess.DataAccess();
         }
 
-        public void SaveCard(Card card)
+        public void SaveCard()
         {
-            _dataAccess.SaveData(card);
+            _dataAccess.SaveData(_card);
         }
 
-        //private Card LoadCard(CardModelQuery cardModelQuery)
-        //{
-        //    return _dataAccess.LoadData(cardModelQuery);
-        //}
-
-        public void LoadCard(CardModelQuery cardModelQuery)
+        public void LoadCard(CardQuery cardQuery)
         {
-            Card = _dataAccess.LoadData(cardModelQuery); 
+            Card = _dataAccess.LoadData(cardQuery);
         }
     }
 }

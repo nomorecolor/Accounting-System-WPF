@@ -1,4 +1,5 @@
 ﻿using AccountingProjectWPF.Model;
+using AccountingProjectWPF.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -31,40 +32,31 @@ namespace AccountingProjectWPF
         public static readonly DependencyProperty CardDetailsListProperty =
             DependencyProperty.Register("CardDetailsList", typeof(ObservableCollection<CardDetails>), typeof(ucStatement));
 
-        public Card DataModel
-        {
-            get { return (Card)GetValue(DataModelProperty); }
-            set { SetValue(DataModelProperty, value); }
-        }
+        private CardViewModel _cardVM;
+        private CardQuery _cardQuery;
 
-        // Using a DependencyProperty as the backing store for Value.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DataModelProperty =
-            DependencyProperty.Register("DataModel", typeof(Card), typeof(ucStatement));
-
-        public ucStatement(Card dm)
+        public ucStatement(CardQuery cardQuery)
         {
-            DataModel = dm;
+            _cardVM = new CardViewModel();
+            _cardQuery = cardQuery;
+
+            _cardVM.LoadCard(_cardQuery);
+
+            DataContext = _cardVM;
 
             InitializeComponent();
-
-            Header = DataModel.Header;
-            CardDetailsList = DataModel.CardDetailsList;
-
-            DataContext = this;
         }
 
-        public ucStatement()
+        public void AddEntry(CardDetails cardDetails)
         {
-            InitializeComponent();
+            _cardVM.Card.CardDetailsList.Add(cardDetails);
+            _cardVM.SaveCard();
         }
 
         private void DeleteButtonClicked(object sender, EventArgs e)
         {
-            CardDetailsList.Remove((CardDetails)(sender as ucCard).DataContext);
-
-            Save?.Invoke(this, e);
+            _cardVM.Card.CardDetailsList.Remove((CardDetails)(sender as ucCard).DataContext);
+            _cardVM.SaveCard();
         }
-
-        public event EventHandler Save;
     }
 }

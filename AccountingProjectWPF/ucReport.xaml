@@ -21,8 +21,13 @@
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Income:"/>
         <TextBlock Grid.Column="0" Grid.Row="1" Text="Expense:"/>
         <TextBlock Grid.Column="0" Grid.Row="2" Text="Savings:"/>
-        
-        
+
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Income}"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Expense}"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Savings}"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
     </Grid>
 </UserControl>

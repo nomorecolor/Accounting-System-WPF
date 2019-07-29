@@ -19,9 +19,9 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-
-
+            
             <Image  Grid.Row="0" Height="100"></Image>
             <Button Name="BtnIncome" Grid.Row="1" Tag="Income" Padding="0,5,20,5" BorderBrush="Black" BorderThickness="0" Background="White">
                 <TextBlock Text="Income"></TextBlock>
@@ -29,7 +29,10 @@
             <Button Name="BtnExpense" Grid.Row="2" Tag="Expense" Padding="0,5,20,5" BorderBrush="Black" BorderThickness="0" Background="White">
                 <TextBlock Text="Expense"></TextBlock>
             </Button>
-            <Button Name="BtnExit" Grid.Row="3"  Padding="0,5,20,5" BorderBrush="Black" BorderThickness="0" Background="White">
+            <Button Name="BtnReport" Grid.Row="3" Padding="0,5,20,5" BorderBrush="Black" BorderThickness="0" Background="White">
+                <TextBlock Text="Reports"></TextBlock>
+            </Button>
+            <Button Name="BtnExit" Grid.Row="4"  Padding="0,5,20,5" BorderBrush="Black" BorderThickness="0" Background="White">
                 <TextBlock Text="Exit"></TextBlock>
             </Button>
         </Grid>

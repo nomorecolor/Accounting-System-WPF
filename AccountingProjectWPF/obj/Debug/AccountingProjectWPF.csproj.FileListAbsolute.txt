@@ -17,7 +17,6 @@ E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\obj\Debug\uc
 E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\obj\Debug\GeneratedInternalTypeHelper.g.cs
 E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\obj\Debug\ucStatement.g.cs
 E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\obj\Debug\ucStatement.baml
-E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\obj\Debug\AccountingProjectWPF.csprojAssemblyReference.cache
 E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\bin\Debug\Newtonsoft.Json.dll
 E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\bin\Debug\Newtonsoft.Json.xml
 E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\obj\Debug\AccountingProjectWPF.csproj.CopyComplete

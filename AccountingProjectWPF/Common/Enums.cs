@@ -23,5 +23,25 @@ namespace AccountingProjectWPF.Common
             November = 11,
             December = 12
         }
+
+        public enum ReportView
+        {
+            CompactView = 1,
+            DetailedView = 2
+        }
+
+        public enum StatementType
+        {
+            None = 0,
+            Income = 1,
+            Expense = 2
+        }
+
+        public enum MainView
+        {
+            None = 0,
+            Statement = 1,
+            Reports = 2
+        }
     }
 }

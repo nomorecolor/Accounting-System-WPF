@@ -9,7 +9,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using static AccountingProjectWPF.Common.Enums;
 
 namespace AccountingProjectWPF
 {
@@ -19,13 +21,14 @@ namespace AccountingProjectWPF
     public partial class MainWindow : Window
     {
         private ucStatement statement;
+        private ucReport report;
 
-        private string header;
+        private StatementType header;
 
-        private readonly Regex regex = new Regex("[^0-9.-]+");
+        private CardQuery cardQuery;
+        private ReportQuery reportQuery;
 
-        private CardModelQuery cardQuery;
-
+        private MainView currentView = MainView.None;
 
         public MainWindow()
         {
@@ -33,6 +36,7 @@ namespace AccountingProjectWPF
 
             BtnIncome.Click += BtnStatementClicked;
             BtnExpense.Click += BtnStatementClicked;
+            BtnReport.Click += BtnReportClicked;
             BtnExit.Click += BtnExitClicked;
 
             txtEntry.KeyDown += NewEntry;
@@ -48,6 +52,8 @@ namespace AccountingProjectWPF
 
             cmbMonths.SelectionChanged += CmbMonthsSelectionChanged;
         }
+
+        #region Others
 
         private void PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -68,13 +74,6 @@ namespace AccountingProjectWPF
 
         }
 
-        private void BtnStatementClicked(object sender, RoutedEventArgs e)
-        {
-            header = (sender as Button).Tag.ToString();
-
-            Statement();
-        }
-
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Exit(e);
@@ -85,49 +84,42 @@ namespace AccountingProjectWPF
             Close();
         }
 
+        #endregion Others
+
+        #region Main
+
+        private void BtnStatementClicked(object sender, RoutedEventArgs e)
+        {
+            header = (StatementType)Enum.Parse(typeof(StatementType), (sender as Button).Tag.ToString());
+
+            Statement();
+
+            currentView = MainView.Statement;
+        }
+        private void BtnReportClicked(object sender, RoutedEventArgs e)
+        {
+            Reports();
+
+            currentView = MainView.Reports;
+        }
+
         private void CmbMonthsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Statement();
-        }
-
-        private void Statement()
-        {
-            if (stackMain.Children.Count > 2)
-                //stackMain.Children.RemoveRange(1, stackMain.Children.Count - 1);
-                stackMain.Children.RemoveAt(2);
-
-            if (header == string.Empty) return;
-
-            cardQuery = new CardModelQuery();
-
-            cardQuery.Header = header;
-            cardQuery.Month = (Enums.Months)Enum.Parse(typeof(Enums.Months), cmbMonths.SelectedValue.ToString());
-            cardQuery.Year = 2019;
-
-            var dm = Load(cardQuery);
-
-            //statement = new ucStatement(dm);            
-            statement = new ucStatement();
-            statement.Loaded += StatementLoaded;
-            statement.Save += SaveEvent;
-
-            stackMain.Children.Add(statement);
-
-            Grid.SetRow(statement, 1);
-        }
-
-        private void StatementLoaded(object sender, RoutedEventArgs e)
-        {
-            var cardVM = new CardViewModel();
-            cardVM.LoadCard(cardQuery);
-
-            statement.DataContext = cardVM;
-        }
-
-        private void Exit(System.ComponentModel.CancelEventArgs e)
-        {
-            if (MessageBox.Show("Are you sure you want to exit?", "Accounting", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
-                e.Cancel = true;
+            switch (currentView)
+            {
+                case MainView.Statement:
+                    {
+                        Statement();
+                        currentView = MainView.Statement;
+                        break;
+                    }
+                case MainView.Reports:
+                    {
+                        Reports();
+                        currentView = MainView.Reports;
+                        break;
+                    }
+            }
         }
 
         private void NewEntry(object sender, KeyEventArgs e)
@@ -137,8 +129,6 @@ namespace AccountingProjectWPF
                 {
                     CreateEntry();
 
-                    Save();
-
                     txtEntry.Text = string.Empty;
                     txtAmount.Text = string.Empty;
 
@@ -146,34 +136,71 @@ namespace AccountingProjectWPF
                 }
         }
 
+        #endregion Main
+
+        #region Methods
+
+        #region Private 
+
+        private void Statement()
+        {
+            if (stackMain.Children.Count > 2)
+                //stackMain.Children.RemoveRange(1, stackMain.Children.Count - 1);
+                stackMain.Children.RemoveAt(2);
+
+            if (header == StatementType.None) return;
+
+            cardQuery = new CardQuery();
+
+            cardQuery.Header = header;
+            cardQuery.Month = (Months)Enum.Parse(typeof(Months), cmbMonths.SelectedValue.ToString());
+            cardQuery.Year = 2019;
+
+            statement = new ucStatement(cardQuery);
+
+            stackMain.Children.Add(statement);
+
+            Grid.SetRow(statement, 1);
+        }
+
+        private void Reports()
+        {
+            if (stackMain.Children.Count > 2)
+                //stackMain.Children.RemoveRange(1, stackMain.Children.Count - 1);
+                stackMain.Children.RemoveAt(2);
+
+            reportQuery = new ReportQuery();
+
+            reportQuery.Header = header;
+            reportQuery.Month = (Months)Enum.Parse(typeof(Months), cmbMonths.SelectedValue.ToString());
+            reportQuery.Year = 2019;
+
+            report = new ucReport(reportQuery);
+
+            stackMain.Children.Add(report);
+
+            Grid.SetRow(report, 1);
+        }
+
         private void CreateEntry()
         {
-            statement.CardDetailsList.Add(new CardDetails { Header = txtEntry.Text.Trim(), Amount = txtAmount.Text.Trim(), DateAdded = DateTime.Now, Description = string.Empty });
+            statement.AddEntry(new CardDetails
+            {
+                Header = txtEntry.Text.Trim(),
+                Amount = Convert.ToDouble(txtAmount.Text.Trim()),
+                DateAdded = DateTime.Now,
+                Description = string.Empty
+            });
         }
 
-        private void Save()
+        private void Exit(System.ComponentModel.CancelEventArgs e)
         {
-            var dm = new Card();
-
-            dm.Header = header;
-            dm.CardDetailsList = statement.CardDetailsList;
-            dm.Year = 2019;
-            dm.Month = (Enums.Months)Enum.Parse(typeof(Enums.Months), cmbMonths.SelectedValue.ToString());
-
-            var dataAccess = new DataAccess.DataAccess();
-            dataAccess.SaveData(dm);
+            if (MessageBox.Show("Are you sure you want to exit?", "Accounting", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                e.Cancel = true;
         }
 
-        private Card Load(CardModelQuery dataModelQuery)
-        {
-            var dataAccess = new DataAccess.DataAccess();
+        #endregion Private 
 
-            return dataAccess.LoadData(dataModelQuery);
-        }
-
-        private void SaveEvent(object sender, EventArgs e)
-        {
-            Save();
-        }
+        #endregion Methods
     }
 }
