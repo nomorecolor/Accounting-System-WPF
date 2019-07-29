@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\obj\Release\
+E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\obj\Debug\
 AccountingProjectWPF
 none
 false
-TRACE
+DEBUG;TRACE
 E:\Working Files\PROJECTS\AccountingProjectWPF\AccountingProjectWPF\App.xaml
 4-1485198809
 
-17-543983539
+181913882363
 14-2086221738
 MainWindow.xaml;ucCard.xaml;ucReport.xaml;ucStatement.xaml;
 
-True
+False
 

@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="AccountingProjectWPF.ucStatement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AccountingProjectWPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="{Binding ElementName=pnlStack}" d:DesignWidth="800">
+    <Grid>
+        <StackPanel Name="pnlStack">
+            <Label HorizontalAlignment="Center" Margin="-10,0,0,0">
+                <TextBlock Text="{Binding Card.Header}"></TextBlock>
+            </Label>
+            <ScrollViewer CanContentScroll="True" 
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto"
+                          MaxHeight="350">
+                <ItemsControl ItemsSource="{Binding Card.CardDetailsList}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:ucCard x:Name="Card"
+                                      Header="{Binding Header}"
+                                      Amount="{Binding Amount}"
+                                      DateAdded="{Binding DateAdded}"
+                                      Description="{Binding Description}"
+                                      HeaderAmount="{Binding HeaderAmount}"
+                                      
+                                      DeleteButtonClicked="DeleteButtonClicked">
+                            </local:ucCard>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
+</UserControl>
